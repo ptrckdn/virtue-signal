@@ -1,0 +1,666 @@
+# LANDANSTAN.city
+# City description file for Virtue Signal
+# Claude Code reads this and generates a Unity editor script
+# that builds the entire city from these instructions.
+#
+# Scale: 1 Unity unit = 1 metre
+# Origin (0,0) = southwest corner of map
+# X = east, Z = north (Unity convention)
+# All positions in metres from origin
+
+# ============================================================
+# MAP
+# ============================================================
+
+map:
+  width: 2400    # east-west, metres
+  depth: 1600    # north-south, metres
+  ground: asphalt_dark
+  road_width_major: 14       # two lanes each direction + centre line
+  road_width_minor: 8        # one lane each direction
+  pavement_width: 2.5
+  kerb_height: 0.15
+  building_setback: 1        # gap between pavement edge and building face
+
+# ============================================================
+# THE THAMES
+# ============================================================
+# Runs roughly east-west across the map
+# South bank is lower third, north bank is upper two thirds
+# River is 80m wide (compressed from real ~250m)
+
+river:
+  name: The Thames
+  width: 80
+  # Control points for the river centre line (spline)
+  # The river curves gently, not straight
+  path:
+    - { x: 0,    z: 520 }
+    - { x: 400,  z: 540 }
+    - { x: 800,  z: 510 }
+    - { x: 1200, z: 530 }
+    - { x: 1600, z: 500 }
+    - { x: 2000, z: 510 }
+    - { x: 2400, z: 490 }
+
+# ============================================================
+# BRIDGES
+# ============================================================
+# Each bridge connects a north bank road to a south bank road
+# Bridges are chokepoints: police set checkpoints here at RED/BLACK
+
+bridges:
+  - name: Westminster Bridge
+    x: 500
+    width: 16
+    lanes: 4
+    checkpoint_priority: 1     # first bridge to get a checkpoint
+
+  - name: Waterloo Bridge
+    x: 900
+    width: 16
+    lanes: 4
+    checkpoint_priority: 3
+
+  - name: Blackfriars Bridge
+    x: 1300
+    width: 14
+    lanes: 3
+    checkpoint_priority: 4
+
+  - name: London Bridge
+    x: 1700
+    width: 14
+    lanes: 3
+    checkpoint_priority: 2
+
+  - name: Tower Bridge
+    x: 2100
+    width: 12
+    lanes: 2
+    checkpoint_priority: 5
+    landmark: true             # visually distinct, AI-generated model
+
+# ============================================================
+# DISTRICTS
+# ============================================================
+# Each district has:
+#   bounds: rectangle in metres (x_min, z_min, x_max, z_max)
+#   faction: which faction controls it
+#   building_style: primary archetype for fill buildings
+#   building_height: range in metres (min, max)
+#   building_density: 0.0 to 1.0 (how much of each block is buildings vs gaps)
+#   lighting: colour temperature and CCTV density
+#   atmosphere: text description for mood/post-processing
+
+districts:
+
+  - name: Mayfair
+    bounds: { x_min: 50, z_min: 1100, x_max: 600, z_max: 1550 }
+    faction: Old Guard
+    building_style: georgian_townhouse
+    building_height: { min: 12, max: 16 }
+    building_density: 0.85
+    lighting:
+      colour_temp: warm_white
+      cctv_density: low
+      street_lights: ornate_victorian
+    atmosphere: "White stucco facades, black iron railings, private members clubs. Quiet money. Nobody gets stopped here."
+    prefab_hints:
+      - "Georgian townhouse, 4 storey, white stucco, black door, sash windows"
+      - "Private club entrance, brass plaque, no signage"
+      - "Art gallery, minimal shopfront"
+
+  - name: Westminster
+    bounds: { x_min: 50, z_min: 600, x_max: 700, z_max: 1100 }
+    faction: Centrist
+    building_style: civic_institutional
+    building_height: { min: 15, max: 30 }
+    building_density: 0.75
+    lighting:
+      colour_temp: cold_white
+      cctv_density: extreme
+      street_lights: modern_led
+    atmosphere: "Portland stone. Neoclassical columns. Everything watched. The air smells of procedure. CCTV on every corner, every lamp post, every railing."
+    prefab_hints:
+      - "Ministry building, Portland stone, columns, wide steps"
+      - "Government office, 6 storey, no personality"
+      - "Police station, blue lamp outside"
+      - "Compliance Centre (meter reduction building)"
+
+  - name: Soho
+    bounds: { x_min: 600, z_min: 1100, x_max: 1000, z_max: 1550 }
+    faction: neutral
+    building_style: mixed_high_street
+    building_height: { min: 10, max: 18 }
+    building_density: 0.9
+    lighting:
+      colour_temp: warm_mixed
+      cctv_density: medium
+      street_lights: mixed
+    atmosphere: "Narrow streets, neon signs, restaurants, theatres. The one district that still feels alive. Neutral ground where all factions can meet."
+    prefab_hints:
+      - "Narrow shopfront with neon sign above"
+      - "Theatre entrance, marquee"
+      - "Restaurant with outdoor seating"
+
+  - name: Covent Garden
+    bounds: { x_min: 700, z_min: 700, x_max: 1100, z_max: 1100 }
+    faction: neutral
+    building_style: victorian_commercial
+    building_height: { min: 12, max: 20 }
+    building_density: 0.85
+    lighting:
+      colour_temp: warm_white
+      cctv_density: medium
+      street_lights: ornate_victorian
+    atmosphere: "Covered market area, street performers, tourists. Transition zone between Westminster power and City money."
+    prefab_hints:
+      - "Victorian shopfront, ornate ground floor"
+      - "Market building, arched entrance"
+
+  - name: The City
+    bounds: { x_min: 1100, z_min: 700, x_max: 1800, z_max: 1200 }
+    faction: Network
+    building_style: glass_tower
+    building_height: { min: 20, max: 80 }
+    building_density: 0.7
+    lighting:
+      colour_temp: blue_white
+      cctv_density: high
+      street_lights: corporate_modern
+    atmosphere: "Glass and steel. The towers reflect everything and reveal nothing. The Network hides here because nobody looks twice at another anonymous office worker. The power depot is in the basement of one of these towers."
+    prefab_hints:
+      - "Glass office tower, 15-20 storey, blue-grey reflective"
+      - "Smaller glass office, 8 storey"
+      - "Corporate lobby entrance, revolving door"
+      - "Power depot / utility building, industrial, restricted"
+
+  - name: Shoreditch
+    bounds: { x_min: 1800, z_min: 1000, x_max: 2350, z_max: 1550 }
+    faction: Composter
+    building_style: warehouse_conversion
+    building_height: { min: 8, max: 15 }
+    building_density: 0.8
+    lighting:
+      colour_temp: warm_orange
+      cctv_density: low
+      street_lights: industrial_pendant
+    atmosphere: "Red brick warehouses with arched windows, now housing vegan cafes and protest headquarters. Faded HypnoBoost billboards. Graffiti that's considered art. The Composters think they're fighting the system from inside a converted loft."
+    prefab_hints:
+      - "Red brick warehouse, arched windows, ground floor bar/cafe"
+      - "Converted warehouse with modern glass top floor"
+      - "Street art mural wall"
+      - "Faded HypnoBoost billboard (recurring joke)"
+
+  - name: Hackney
+    bounds: { x_min: 1800, z_min: 1200, x_max: 2350, z_max: 1550 }
+    faction: Patriot
+    building_style: new_build_residential
+    building_height: { min: 10, max: 25 }
+    building_density: 0.75
+    lighting:
+      colour_temp: neutral_white
+      cctv_density: medium
+      street_lights: modern_basic
+    atmosphere: "New build cladding next to old council blocks. Barrage holds his rallies in the car park of a converted leisure centre. The irony of an anti-immigration rally in buildings built by immigrant labour is lost on everyone present."
+    prefab_hints:
+      - "New build residential, cladding panels, balconies, soulless"
+      - "Old council block, 6 storey, concrete"
+      - "Leisure centre (rally venue)"
+
+  - name: South Bank
+    bounds: { x_min: 400, z_min: 300, x_max: 1200, z_max: 520 }
+    faction: neutral
+    building_style: mixed_cultural
+    building_height: { min: 10, max: 30 }
+    building_density: 0.6
+    lighting:
+      colour_temp: warm_mixed
+      cctv_density: medium
+      street_lights: modern_artistic
+    atmosphere: "Cultural institutions, the Eye, concrete walkways. A buffer zone between the power of the north bank and the reality of the south."
+    prefab_hints:
+      - "Brutalist cultural centre (Southbank Centre reference)"
+      - "Modern museum building"
+      - "Riverside walkway with benches"
+
+  - name: Brixton
+    bounds: { x_min: 50, z_min: 50, x_max: 700, z_max: 420 }
+    faction: Liberator
+    building_style: victorian_terrace
+    building_height: { min: 8, max: 12 }
+    building_density: 0.9
+    lighting:
+      colour_temp: warm_orange
+      cctv_density: minimal
+      street_lights: sodium_orange
+    atmosphere: "Victorian terraces with bay windows. The Liberators live in houses their parents bought for 200k that are now worth 1.2 million. They plan the revolution over brunch. Graffiti here is political, not decorative."
+    prefab_hints:
+      - "Victorian brick terrace, bay windows, 3 storey"
+      - "Corner shop, independent"
+      - "Caribbean restaurant"
+      - "Liberator safe house (mission location)"
+
+  - name: Elephant and Castle
+    bounds: { x_min: 700, z_min: 50, x_max: 1400, z_max: 420 }
+    faction: Restorationist
+    building_style: brutalist_council
+    building_height: { min: 8, max: 40 }
+    building_density: 0.7
+    lighting:
+      colour_temp: cold_sodium
+      cctv_density: medium
+      street_lights: basic_concrete_pole
+    atmosphere: "Brutalist tower blocks with walkways. Council estates. The Restorationists are right about every problem and wrong about every solution. Tommy Lemon appears here in various disguises despite being banned from the district."
+    prefab_hints:
+      - "Brutalist tower block, concrete, 10-15 storey, balconies, walkways"
+      - "Council estate low-rise, 3-4 storey"
+      - "Betting shop"
+      - "Chicken shop"
+      - "Community centre (meter reduction workshop location)"
+
+  - name: Bermondsey
+    bounds: { x_min: 1400, z_min: 50, x_max: 2000, z_max: 420 }
+    faction: neutral
+    building_style: warehouse_mixed
+    building_height: { min: 8, max: 14 }
+    building_density: 0.75
+    lighting:
+      colour_temp: warm_industrial
+      cctv_density: low
+      street_lights: industrial_wall_mount
+    atmosphere: "Old wharves and warehouses, some converted, some derelict. The quiet part of south London where deals get done."
+    prefab_hints:
+      - "Victorian warehouse, loading bay doors"
+      - "Converted wharf apartments"
+
+  - name: Canary Wharf
+    bounds: { x_min: 2000, z_min: 50, x_max: 2350, z_max: 520 }
+    faction: neutral
+    building_style: corporate_tower
+    building_height: { min: 30, max: 60 }
+    building_density: 0.5
+    lighting:
+      colour_temp: blue_white
+      cctv_density: high
+      street_lights: corporate_modern
+    atmosphere: "Identical glass towers on a grid. Zia Merchant's penthouse is here. The most expensive postcode in Landanstan and the most lifeless. Nobody lives here. They just work and leave."
+    prefab_hints:
+      - "Corporate tower, glass, 20-30 storey, identical to neighbours"
+      - "Shopping mall entrance, underground"
+      - "Merchant's penthouse tower (landmark, taller than everything)"
+
+# ============================================================
+# MAJOR ROADS
+# ============================================================
+# Each road is a spline with control points
+# type: major (14m wide) or minor (8m wide)
+# Roads form the skeleton. Buildings fill the gaps between them.
+
+roads:
+
+  # EAST-WEST (north bank)
+  - name: Oxford Street
+    type: major
+    path:
+      - { x: 50,   z: 1400 }
+      - { x: 600,  z: 1400 }
+      - { x: 1000, z: 1380 }
+      - { x: 1500, z: 1350 }
+      - { x: 1800, z: 1350 }
+
+  - name: The Strand
+    type: major
+    path:
+      - { x: 600,  z: 1000 }
+      - { x: 800,  z: 1000 }
+      - { x: 1100, z: 980 }
+      - { x: 1400, z: 960 }
+      - { x: 1700, z: 950 }
+
+  - name: Fleet Street
+    type: major
+    notes: "Continues east from The Strand into The City"
+    path:
+      - { x: 1100, z: 980 }
+      - { x: 1400, z: 960 }
+      - { x: 1700, z: 950 }
+
+  - name: Embankment
+    type: major
+    notes: "Runs along north bank of Thames. Scenic route but surveilled."
+    path:
+      - { x: 200,  z: 580 }
+      - { x: 500,  z: 590 }
+      - { x: 800,  z: 570 }
+      - { x: 1200, z: 580 }
+      - { x: 1600, z: 560 }
+      - { x: 2000, z: 565 }
+
+  - name: Old Street
+    type: minor
+    path:
+      - { x: 1300, z: 1250 }
+      - { x: 1600, z: 1280 }
+      - { x: 1900, z: 1300 }
+      - { x: 2200, z: 1320 }
+
+  # NORTH-SOUTH (north bank)
+  - name: Park Lane
+    type: major
+    path:
+      - { x: 100, z: 1550 }
+      - { x: 100, z: 1100 }
+      - { x: 100, z: 700 }
+
+  - name: Whitehall
+    type: major
+    notes: "The artery of power. Downing St is on this road. Maximum CCTV."
+    path:
+      - { x: 500, z: 1100 }
+      - { x: 500, z: 900 }
+      - { x: 500, z: 700 }
+      - { x: 500, z: 590 }
+
+  - name: Kingsway
+    type: major
+    path:
+      - { x: 900, z: 1400 }
+      - { x: 900, z: 1100 }
+      - { x: 900, z: 800 }
+      - { x: 900, z: 590 }
+
+  - name: Farringdon Road
+    type: minor
+    path:
+      - { x: 1200, z: 1350 }
+      - { x: 1200, z: 1100 }
+      - { x: 1200, z: 800 }
+      - { x: 1200, z: 590 }
+
+  - name: Commercial Street
+    type: minor
+    path:
+      - { x: 1900, z: 1350 }
+      - { x: 1900, z: 1100 }
+      - { x: 1900, z: 800 }
+      - { x: 1900, z: 590 }
+
+  - name: Regent Street
+    type: major
+    path:
+      - { x: 600, z: 1550 }
+      - { x: 620, z: 1300 }
+      - { x: 650, z: 1000 }
+
+  # SOUTH OF THAMES
+  - name: Brixton Road
+    type: major
+    path:
+      - { x: 400, z: 420 }
+      - { x: 350, z: 250 }
+      - { x: 300, z: 50 }
+
+  - name: Walworth Road
+    type: major
+    path:
+      - { x: 1000, z: 420 }
+      - { x: 1000, z: 250 }
+      - { x: 1000, z: 50 }
+
+  - name: Tower Bridge Road
+    type: minor
+    path:
+      - { x: 1700, z: 420 }
+      - { x: 1700, z: 250 }
+      - { x: 1700, z: 50 }
+
+  - name: Jamaica Road
+    type: minor
+    path:
+      - { x: 1200, z: 350 }
+      - { x: 1500, z: 340 }
+      - { x: 1800, z: 330 }
+      - { x: 2100, z: 320 }
+
+  - name: New Kent Road
+    type: major
+    notes: "Main east-west south of river"
+    path:
+      - { x: 600,  z: 350 }
+      - { x: 900,  z: 340 }
+      - { x: 1200, z: 330 }
+      - { x: 1500, z: 320 }
+
+# ============================================================
+# LANDMARKS
+# ============================================================
+# Hand-placed. AI-generated 3D models. These are what make
+# Landanstan feel like London. Each one visible from at least
+# two adjacent districts.
+
+landmarks:
+
+  - name: Parliament
+    position: { x: 480, z: 620 }
+    height: 40
+    district: Westminster
+    model_prompt: "Gothic revival parliament building, Elizabeth Tower (Big Ben) clock tower, Portland stone, Thames-facing, game asset"
+    gameplay: "Visible from Westminster Bridge. The building where the Civility Index law was written. Passing it at RED triggers extra CCTV."
+
+  - name: Downing Street Gate
+    position: { x: 500, z: 850 }
+    height: 4
+    district: Westminster
+    model_prompt: "Black iron security gate with police guard booth, Downing Street style, game asset"
+    gameplay: "Restricted area. Entering adds +5 to meter instantly. Sir Keith Harmer is sometimes visible behind the gate."
+
+  - name: The Shard
+    position: { x: 1500, z: 380 }
+    height: 100
+    district: South Bank
+    model_prompt: "Glass pyramidal skyscraper, The Shard London style, very tall, game asset"
+    gameplay: "Visible from everywhere south of the Thames. Orientation landmark. Merchant has offices here."
+
+  - name: Tower Bridge
+    position: { x: 2100, z: 510 }
+    height: 30
+    district: border
+    model_prompt: "Tower Bridge London, two gothic towers, suspension bridge, blue painted ironwork, game asset"
+    gameplay: "Easternmost crossing. Less patrolled than Westminster Bridge. Escape route."
+
+  - name: St Pauls Cathedral
+    position: { x: 1400, z: 1000 }
+    height: 50
+    district: The City
+    model_prompt: "St Pauls Cathedral dome, baroque, Portland stone, large dome and columns, game asset"
+    gameplay: "Centre of The City district. Network dead-drop location nearby."
+
+  - name: London Eye
+    position: { x: 700, z: 450 }
+    height: 45
+    district: South Bank
+    model_prompt: "Large observation wheel, London Eye style, white steel structure, game asset"
+    gameplay: "South bank landmark. Visible from Westminster. Tourist area, lots of pedestrians, easy to blend into crowds at AMBER."
+
+  - name: Buckingham Palace Gates
+    position: { x: 200, z: 900 }
+    height: 8
+    district: Westminster
+    model_prompt: "Ornate palace gates with gold tips, guard sentry boxes, wide ceremonial road, game asset"
+    gameplay: "Old Guard adjacent. Prince Rupert's estate is behind these gates. Police never patrol inside."
+
+  - name: Brutalist Tower (Elephant)
+    position: { x: 1000, z: 200 }
+    height: 45
+    district: Elephant and Castle
+    model_prompt: "1960s brutalist council tower block, grey concrete, small windows, balconies with washing lines, council estate, game asset"
+    gameplay: "Restorationist territory. Tommy Lemon's last known address (he's never there)."
+
+  - name: Composter HQ
+    position: { x: 2000, z: 1200 }
+    height: 12
+    district: Shoreditch
+    model_prompt: "Converted Victorian warehouse with modern glass extension on roof, 'Community Action Centre' sign, bicycle racks outside, game asset"
+    gameplay: "Zane Polansky operates from here. Faded HypnoBoost poster in the window."
+
+  - name: The Library
+    position: { x: 300, z: 800 }
+    height: 18
+    district: Westminster
+    model_prompt: "Victorian public library, red brick with stone detailing, arched entrance, slightly neglected, game asset"
+    gameplay: "MISSION 5 TARGET. The Network's pirate transmitter is in the basement. This is where the broadcast happens."
+
+  - name: Power Depot
+    position: { x: 1500, z: 900 }
+    height: 8
+    district: The City
+    model_prompt: "Industrial utility building, concrete, heavy security door, electrical warning signs, surrounded by glass towers, game asset"
+    gameplay: "MISSION 5 START. The power cell is inside. Restricted area. Meter ticks up just being near it."
+
+  - name: Merchant Tower
+    position: { x: 2200, z: 200 }
+    height: 70
+    district: Canary Wharf
+    model_prompt: "Luxury residential tower, glass and steel, penthouse visible at top, helipad, game asset"
+    gameplay: "Zia Merchant's penthouse. Permanently GREEN Civility Index zone around it. Money buys compliance."
+
+# ============================================================
+# MISSION 5 ROUTE
+# ============================================================
+# The cross-city drive that is the viral demo
+
+mission_5:
+  name: "The Signal"
+  route:
+    - point: Power Depot
+      action: "Infiltrate. Steal power cell. Meter starts climbing."
+    - road: Fleet Street (westbound)
+      action: "Drive west. Traffic and pedestrians. Meter at AMBER."
+    - road: The Strand (westbound)
+      action: "Through Covent Garden area. First police attention."
+    - turn: Whitehall (southbound)
+      action: "Down Whitehall. Past Downing St. CCTV maximal. Meter hits RED."
+    - pass: Parliament
+      action: "Drive past Parliament. Extra CCTV burst. Checkpoints ahead."
+    - turn: west toward The Library
+      action: "Off Whitehall. Side streets. Police in pursuit."
+    - point: The Library
+      action: "Arrive. Install power cell. Choose broadcast. Meter hits BLACK."
+    - survive: 60 seconds
+      action: "Helicopter. 4-5 police cars. Survive."
+    - escape: any direction
+      action: "Escape through Landanstan at BLACK level."
+
+  route_distance: ~1200m
+  estimated_drive_time: 90 seconds at speed
+  cctv_corridor: "Westminster section has camera every 50m. Unavoidable."
+
+# ============================================================
+# BUILDING FILL RULES
+# ============================================================
+# How Claude Code fills blocks between roads with buildings
+
+fill_rules:
+  # For each city block (area between roads):
+  # 1. Determine which district the block centre falls in
+  # 2. Use that district's building_style and height range
+  # 3. Place buildings along road edges, facing the road
+  # 4. Leave a pavement gap between road and building
+  # 5. Vary building width: 6-15m for terraces, 15-30m for offices, 20-40m for towers
+  # 6. Vary height within district range (randomise)
+  # 7. Add box colliders slightly larger than visual mesh
+  # 8. Every 3rd building: add CCTV camera on corner (more frequent in high-density CCTV districts)
+  # 9. Place parked cars along roads: one every 20-30m on minor roads, every 40-50m on major roads
+  # 10. Add lampposts every 25m on both sides of every road
+
+  building_widths:
+    georgian_townhouse: { min: 6, max: 8, depth: 12 }
+    civic_institutional: { min: 20, max: 40, depth: 25 }
+    mixed_high_street: { min: 5, max: 10, depth: 10 }
+    victorian_commercial: { min: 8, max: 15, depth: 12 }
+    glass_tower: { min: 25, max: 40, depth: 25 }
+    warehouse_conversion: { min: 15, max: 30, depth: 20 }
+    new_build_residential: { min: 12, max: 20, depth: 15 }
+    mixed_cultural: { min: 20, max: 50, depth: 30 }
+    victorian_terrace: { min: 5, max: 7, depth: 10 }
+    brutalist_council: { min: 20, max: 40, depth: 15 }
+    warehouse_mixed: { min: 15, max: 25, depth: 20 }
+    corporate_tower: { min: 30, max: 45, depth: 30 }
+
+# ============================================================
+# ATMOSPHERE
+# ============================================================
+# Global post-processing and environmental settings
+
+atmosphere:
+  time_of_day: overcast_afternoon    # default. Missions can override.
+  sky: london_overcast_hdri
+  fog: light_haze                    # always slightly hazy. London.
+  rain: intermittent                 # 30% chance of rain at any time
+  colour_grading: desaturated_cold   # washed out, blue-grey, surveillance state
+  bloom: subtle                      # street lights and CCTV LEDs glow
+  vignette: light                    # edges slightly dark, tension
+  film_grain: very_subtle            # GTA III era callback
+
+  district_overrides:
+    Westminster:  { saturation: -20, blue_tint: +10 }   # coldest
+    Mayfair:      { saturation: -5, warmth: +5 }         # slightly warmer
+    Shoreditch:   { saturation: +5, warmth: +10 }        # most colour
+    Brixton:      { saturation: 0, warmth: +15 }         # warm sodium glow
+    Elephant:     { saturation: -15, contrast: +10 }     # harshest
+    The City:     { saturation: -10, blue_tint: +15 }    # corporate cold
+    Canary Wharf: { saturation: -20, blue_tint: +20 }    # sterile
+
+# ============================================================
+# SOUNDS
+# ============================================================
+# Ambient audio per district. Layered on top of global city hum.
+
+sounds:
+  global:
+    - city_traffic_hum        # constant, low volume
+    - distant_sirens          # every 60-120 seconds, random direction
+    - wind                    # light, constant
+
+  district_layers:
+    Westminster:  [ cctv_whirr, formal_footsteps, radio_chatter ]
+    Mayfair:      [ quiet_street, birdsong, distant_heels ]
+    Soho:         [ crowd_noise, music_from_bars, laughter ]
+    The City:     [ ventilation_hum, shoe_clicks, phone_calls ]
+    Shoreditch:   [ bicycle_bells, coffee_machine, acoustic_guitar ]
+    Hackney:      [ construction_noise, dogs_barking, bass_from_car ]
+    Brixton:      [ reggae_from_shop, market_calls, buses ]
+    Elephant:     [ concrete_echo, kids_playing_far, helicopter_distant ]
+    Canary Wharf: [ silence, wind_between_towers, security_gate_beep ]
+
+# ============================================================
+# GENERATION INSTRUCTIONS FOR CLAUDE CODE
+# ============================================================
+#
+# 1. Create a Unity editor script: LandanstanGenerator.cs
+# 2. Parse this file (treat as YAML)
+# 3. Create a flat terrain at the map dimensions
+# 4. Generate river mesh from spline points (blue-grey water material)
+# 5. Generate bridge meshes at specified positions
+# 6. For each road: create spline, extrude road mesh, add pavement meshes
+# 7. For each block between roads:
+#    a. Determine district from block centre position
+#    b. Place buildings along road-facing edges per fill_rules
+#    c. Use placeholder boxes initially (correct size, district colour)
+#    d. Add box colliders
+#    e. Add CCTV cameras per district density
+#    f. Add parked cars and lampposts
+# 8. Place landmark prefabs at specified positions (placeholder cubes with labels)
+# 9. Set up URP post-processing volume per district
+# 10. Bake NavMesh on pavements for pedestrian pathfinding
+# 11. Output: one Unity scene, LandanstanCity.unity
+#
+# Placeholder models get replaced later with:
+#   - City Builder: London prefabs for generic buildings
+#   - AI-generated models (Meshy/Tripo) for landmarks
+#   - AI-generated models for unique faction buildings
+#
+# The city should be driveable on first generation.
+# Beauty comes later. Layout and collision come first.
