@@ -1,47 +1,47 @@
 # LANDANSTAN.city
 # City description file for Virtue Signal
-# Claude Code reads this and generates a Unity editor script
+# Claude Code reads this and generates a UE5 Editor Utility Blueprint or Python script
 # that builds the entire city from these instructions.
 #
-# Scale: 1 Unity unit = 1 metre
-# Origin (0,0) = southwest corner of map
-# X = east, Z = north (Unity convention)
-# All positions in metres from origin
+# Scale: 1 Unreal unit = 1 centimetre
+# Origin (0,0,0) = southwest corner of map
+# X = east, Y = north, Z = up (UE5 convention)
+# All positions in centimetres from origin
 
 # ============================================================
 # MAP
 # ============================================================
 
 map:
-  width: 2400    # east-west, metres
-  depth: 1600    # north-south, metres
+  width: 240000    # east-west, centimetres (2.4 km)
+  depth: 160000    # north-south, centimetres (1.6 km)
   ground: asphalt_dark
-  road_width_major: 14       # two lanes each direction + centre line
-  road_width_minor: 8        # one lane each direction
-  pavement_width: 2.5
-  kerb_height: 0.15
-  building_setback: 1        # gap between pavement edge and building face
+  road_width_major: 1400       # two lanes each direction + centre line
+  road_width_minor: 800        # one lane each direction
+  pavement_width: 250
+  kerb_height: 15
+  building_setback: 100        # gap between pavement edge and building face
 
 # ============================================================
 # THE THAMES
 # ============================================================
 # Runs roughly east-west across the map
 # South bank is lower third, north bank is upper two thirds
-# River is 80m wide (compressed from real ~250m)
+# River is 8000cm (80m) wide (compressed from real ~250m)
 
 river:
   name: The Thames
-  width: 80
+  width: 8000
   # Control points for the river centre line (spline)
   # The river curves gently, not straight
   path:
-    - { x: 0,    z: 520 }
-    - { x: 400,  z: 540 }
-    - { x: 800,  z: 510 }
-    - { x: 1200, z: 530 }
-    - { x: 1600, z: 500 }
-    - { x: 2000, z: 510 }
-    - { x: 2400, z: 490 }
+    - { x: 0,      y: 52000 }
+    - { x: 40000,  y: 54000 }
+    - { x: 80000,  y: 51000 }
+    - { x: 120000, y: 53000 }
+    - { x: 160000, y: 50000 }
+    - { x: 200000, y: 51000 }
+    - { x: 240000, y: 49000 }
 
 # ============================================================
 # BRIDGES
@@ -51,32 +51,32 @@ river:
 
 bridges:
   - name: Westminster Bridge
-    x: 500
-    width: 16
+    x: 50000
+    width: 1600
     lanes: 4
     checkpoint_priority: 1     # first bridge to get a checkpoint
 
   - name: Waterloo Bridge
-    x: 900
-    width: 16
+    x: 90000
+    width: 1600
     lanes: 4
     checkpoint_priority: 3
 
   - name: Blackfriars Bridge
-    x: 1300
-    width: 14
+    x: 130000
+    width: 1400
     lanes: 3
     checkpoint_priority: 4
 
   - name: London Bridge
-    x: 1700
-    width: 14
+    x: 170000
+    width: 1400
     lanes: 3
     checkpoint_priority: 2
 
   - name: Tower Bridge
-    x: 2100
-    width: 12
+    x: 210000
+    width: 1200
     lanes: 2
     checkpoint_priority: 5
     landmark: true             # visually distinct, AI-generated model
@@ -85,10 +85,10 @@ bridges:
 # DISTRICTS
 # ============================================================
 # Each district has:
-#   bounds: rectangle in metres (x_min, z_min, x_max, z_max)
+#   bounds: rectangle in centimetres (x_min, y_min, x_max, y_max)
 #   faction: which faction controls it
 #   building_style: primary archetype for fill buildings
-#   building_height: range in metres (min, max)
+#   building_height: range in centimetres (min, max)
 #   building_density: 0.0 to 1.0 (how much of each block is buildings vs gaps)
 #   lighting: colour temperature and CCTV density
 #   atmosphere: text description for mood/post-processing
@@ -96,10 +96,10 @@ bridges:
 districts:
 
   - name: Mayfair
-    bounds: { x_min: 50, z_min: 1100, x_max: 600, z_max: 1550 }
+    bounds: { x_min: 5000, y_min: 110000, x_max: 60000, y_max: 155000 }
     faction: Old Guard
     building_style: georgian_townhouse
-    building_height: { min: 12, max: 16 }
+    building_height: { min: 1200, max: 1600 }
     building_density: 0.85
     lighting:
       colour_temp: warm_white
@@ -112,10 +112,10 @@ districts:
       - "Art gallery, minimal shopfront"
 
   - name: Westminster
-    bounds: { x_min: 50, z_min: 600, x_max: 700, z_max: 1100 }
+    bounds: { x_min: 5000, y_min: 60000, x_max: 70000, y_max: 110000 }
     faction: Centrist
     building_style: civic_institutional
-    building_height: { min: 15, max: 30 }
+    building_height: { min: 1500, max: 3000 }
     building_density: 0.75
     lighting:
       colour_temp: cold_white
@@ -129,10 +129,10 @@ districts:
       - "Compliance Centre (meter reduction building)"
 
   - name: Soho
-    bounds: { x_min: 600, z_min: 1100, x_max: 1000, z_max: 1550 }
+    bounds: { x_min: 60000, y_min: 110000, x_max: 100000, y_max: 155000 }
     faction: neutral
     building_style: mixed_high_street
-    building_height: { min: 10, max: 18 }
+    building_height: { min: 1000, max: 1800 }
     building_density: 0.9
     lighting:
       colour_temp: warm_mixed
@@ -145,10 +145,10 @@ districts:
       - "Restaurant with outdoor seating"
 
   - name: Covent Garden
-    bounds: { x_min: 700, z_min: 700, x_max: 1100, z_max: 1100 }
+    bounds: { x_min: 70000, y_min: 70000, x_max: 110000, y_max: 110000 }
     faction: neutral
     building_style: victorian_commercial
-    building_height: { min: 12, max: 20 }
+    building_height: { min: 1200, max: 2000 }
     building_density: 0.85
     lighting:
       colour_temp: warm_white
@@ -160,10 +160,10 @@ districts:
       - "Market building, arched entrance"
 
   - name: The City
-    bounds: { x_min: 1100, z_min: 700, x_max: 1800, z_max: 1200 }
+    bounds: { x_min: 110000, y_min: 70000, x_max: 180000, y_max: 120000 }
     faction: Network
     building_style: glass_tower
-    building_height: { min: 20, max: 80 }
+    building_height: { min: 2000, max: 8000 }
     building_density: 0.7
     lighting:
       colour_temp: blue_white
@@ -177,10 +177,10 @@ districts:
       - "Power depot / utility building, industrial, restricted"
 
   - name: Shoreditch
-    bounds: { x_min: 1800, z_min: 1000, x_max: 2350, z_max: 1550 }
+    bounds: { x_min: 180000, y_min: 100000, x_max: 235000, y_max: 155000 }
     faction: Composter
     building_style: warehouse_conversion
-    building_height: { min: 8, max: 15 }
+    building_height: { min: 800, max: 1500 }
     building_density: 0.8
     lighting:
       colour_temp: warm_orange
@@ -194,10 +194,10 @@ districts:
       - "Faded HypnoBoost billboard (recurring joke)"
 
   - name: Hackney
-    bounds: { x_min: 1800, z_min: 1200, x_max: 2350, z_max: 1550 }
+    bounds: { x_min: 180000, y_min: 120000, x_max: 235000, y_max: 155000 }
     faction: Patriot
     building_style: new_build_residential
-    building_height: { min: 10, max: 25 }
+    building_height: { min: 1000, max: 2500 }
     building_density: 0.75
     lighting:
       colour_temp: neutral_white
@@ -210,10 +210,10 @@ districts:
       - "Leisure centre (rally venue)"
 
   - name: South Bank
-    bounds: { x_min: 400, z_min: 300, x_max: 1200, z_max: 520 }
+    bounds: { x_min: 40000, y_min: 30000, x_max: 120000, y_max: 52000 }
     faction: neutral
     building_style: mixed_cultural
-    building_height: { min: 10, max: 30 }
+    building_height: { min: 1000, max: 3000 }
     building_density: 0.6
     lighting:
       colour_temp: warm_mixed
@@ -226,10 +226,10 @@ districts:
       - "Riverside walkway with benches"
 
   - name: Brixton
-    bounds: { x_min: 50, z_min: 50, x_max: 700, z_max: 420 }
+    bounds: { x_min: 5000, y_min: 5000, x_max: 70000, y_max: 42000 }
     faction: Liberator
     building_style: victorian_terrace
-    building_height: { min: 8, max: 12 }
+    building_height: { min: 800, max: 1200 }
     building_density: 0.9
     lighting:
       colour_temp: warm_orange
@@ -243,10 +243,10 @@ districts:
       - "Liberator safe house (mission location)"
 
   - name: Elephant and Castle
-    bounds: { x_min: 700, z_min: 50, x_max: 1400, z_max: 420 }
+    bounds: { x_min: 70000, y_min: 5000, x_max: 140000, y_max: 42000 }
     faction: Restorationist
     building_style: brutalist_council
-    building_height: { min: 8, max: 40 }
+    building_height: { min: 800, max: 4000 }
     building_density: 0.7
     lighting:
       colour_temp: cold_sodium
@@ -261,10 +261,10 @@ districts:
       - "Community centre (meter reduction workshop location)"
 
   - name: Bermondsey
-    bounds: { x_min: 1400, z_min: 50, x_max: 2000, z_max: 420 }
+    bounds: { x_min: 140000, y_min: 5000, x_max: 200000, y_max: 42000 }
     faction: neutral
     building_style: warehouse_mixed
-    building_height: { min: 8, max: 14 }
+    building_height: { min: 800, max: 1400 }
     building_density: 0.75
     lighting:
       colour_temp: warm_industrial
@@ -276,10 +276,10 @@ districts:
       - "Converted wharf apartments"
 
   - name: Canary Wharf
-    bounds: { x_min: 2000, z_min: 50, x_max: 2350, z_max: 520 }
+    bounds: { x_min: 200000, y_min: 5000, x_max: 235000, y_max: 52000 }
     faction: neutral
     building_style: corporate_tower
-    building_height: { min: 30, max: 60 }
+    building_height: { min: 3000, max: 6000 }
     building_density: 0.5
     lighting:
       colour_temp: blue_white
@@ -295,7 +295,7 @@ districts:
 # MAJOR ROADS
 # ============================================================
 # Each road is a spline with control points
-# type: major (14m wide) or minor (8m wide)
+# type: major (1400cm wide) or minor (800cm wide)
 # Roads form the skeleton. Buildings fill the gaps between them.
 
 roads:
@@ -304,134 +304,134 @@ roads:
   - name: Oxford Street
     type: major
     path:
-      - { x: 50,   z: 1400 }
-      - { x: 600,  z: 1400 }
-      - { x: 1000, z: 1380 }
-      - { x: 1500, z: 1350 }
-      - { x: 1800, z: 1350 }
+      - { x: 5000,    y: 140000 }
+      - { x: 60000,   y: 140000 }
+      - { x: 100000,  y: 138000 }
+      - { x: 150000,  y: 135000 }
+      - { x: 180000,  y: 135000 }
 
   - name: The Strand
     type: major
     path:
-      - { x: 600,  z: 1000 }
-      - { x: 800,  z: 1000 }
-      - { x: 1100, z: 980 }
-      - { x: 1400, z: 960 }
-      - { x: 1700, z: 950 }
+      - { x: 60000,   y: 100000 }
+      - { x: 80000,   y: 100000 }
+      - { x: 110000,  y: 98000 }
+      - { x: 140000,  y: 96000 }
+      - { x: 170000,  y: 95000 }
 
   - name: Fleet Street
     type: major
     notes: "Continues east from The Strand into The City"
     path:
-      - { x: 1100, z: 980 }
-      - { x: 1400, z: 960 }
-      - { x: 1700, z: 950 }
+      - { x: 110000,  y: 98000 }
+      - { x: 140000,  y: 96000 }
+      - { x: 170000,  y: 95000 }
 
   - name: Embankment
     type: major
     notes: "Runs along north bank of Thames. Scenic route but surveilled."
     path:
-      - { x: 200,  z: 580 }
-      - { x: 500,  z: 590 }
-      - { x: 800,  z: 570 }
-      - { x: 1200, z: 580 }
-      - { x: 1600, z: 560 }
-      - { x: 2000, z: 565 }
+      - { x: 20000,   y: 58000 }
+      - { x: 50000,   y: 59000 }
+      - { x: 80000,   y: 57000 }
+      - { x: 120000,  y: 58000 }
+      - { x: 160000,  y: 56000 }
+      - { x: 200000,  y: 56500 }
 
   - name: Old Street
     type: minor
     path:
-      - { x: 1300, z: 1250 }
-      - { x: 1600, z: 1280 }
-      - { x: 1900, z: 1300 }
-      - { x: 2200, z: 1320 }
+      - { x: 130000,  y: 125000 }
+      - { x: 160000,  y: 128000 }
+      - { x: 190000,  y: 130000 }
+      - { x: 220000,  y: 132000 }
 
   # NORTH-SOUTH (north bank)
   - name: Park Lane
     type: major
     path:
-      - { x: 100, z: 1550 }
-      - { x: 100, z: 1100 }
-      - { x: 100, z: 700 }
+      - { x: 10000, y: 155000 }
+      - { x: 10000, y: 110000 }
+      - { x: 10000, y: 70000 }
 
   - name: Whitehall
     type: major
     notes: "The artery of power. Downing St is on this road. Maximum CCTV."
     path:
-      - { x: 500, z: 1100 }
-      - { x: 500, z: 900 }
-      - { x: 500, z: 700 }
-      - { x: 500, z: 590 }
+      - { x: 50000, y: 110000 }
+      - { x: 50000, y: 90000 }
+      - { x: 50000, y: 70000 }
+      - { x: 50000, y: 59000 }
 
   - name: Kingsway
     type: major
     path:
-      - { x: 900, z: 1400 }
-      - { x: 900, z: 1100 }
-      - { x: 900, z: 800 }
-      - { x: 900, z: 590 }
+      - { x: 90000, y: 140000 }
+      - { x: 90000, y: 110000 }
+      - { x: 90000, y: 80000 }
+      - { x: 90000, y: 59000 }
 
   - name: Farringdon Road
     type: minor
     path:
-      - { x: 1200, z: 1350 }
-      - { x: 1200, z: 1100 }
-      - { x: 1200, z: 800 }
-      - { x: 1200, z: 590 }
+      - { x: 120000, y: 135000 }
+      - { x: 120000, y: 110000 }
+      - { x: 120000, y: 80000 }
+      - { x: 120000, y: 59000 }
 
   - name: Commercial Street
     type: minor
     path:
-      - { x: 1900, z: 1350 }
-      - { x: 1900, z: 1100 }
-      - { x: 1900, z: 800 }
-      - { x: 1900, z: 590 }
+      - { x: 190000, y: 135000 }
+      - { x: 190000, y: 110000 }
+      - { x: 190000, y: 80000 }
+      - { x: 190000, y: 59000 }
 
   - name: Regent Street
     type: major
     path:
-      - { x: 600, z: 1550 }
-      - { x: 620, z: 1300 }
-      - { x: 650, z: 1000 }
+      - { x: 60000, y: 155000 }
+      - { x: 62000, y: 130000 }
+      - { x: 65000, y: 100000 }
 
   # SOUTH OF THAMES
   - name: Brixton Road
     type: major
     path:
-      - { x: 400, z: 420 }
-      - { x: 350, z: 250 }
-      - { x: 300, z: 50 }
+      - { x: 40000, y: 42000 }
+      - { x: 35000, y: 25000 }
+      - { x: 30000, y: 5000 }
 
   - name: Walworth Road
     type: major
     path:
-      - { x: 1000, z: 420 }
-      - { x: 1000, z: 250 }
-      - { x: 1000, z: 50 }
+      - { x: 100000, y: 42000 }
+      - { x: 100000, y: 25000 }
+      - { x: 100000, y: 5000 }
 
   - name: Tower Bridge Road
     type: minor
     path:
-      - { x: 1700, z: 420 }
-      - { x: 1700, z: 250 }
-      - { x: 1700, z: 50 }
+      - { x: 170000, y: 42000 }
+      - { x: 170000, y: 25000 }
+      - { x: 170000, y: 5000 }
 
   - name: Jamaica Road
     type: minor
     path:
-      - { x: 1200, z: 350 }
-      - { x: 1500, z: 340 }
-      - { x: 1800, z: 330 }
-      - { x: 2100, z: 320 }
+      - { x: 120000, y: 35000 }
+      - { x: 150000, y: 34000 }
+      - { x: 180000, y: 33000 }
+      - { x: 210000, y: 32000 }
 
   - name: New Kent Road
     type: major
     notes: "Main east-west south of river"
     path:
-      - { x: 600,  z: 350 }
-      - { x: 900,  z: 340 }
-      - { x: 1200, z: 330 }
-      - { x: 1500, z: 320 }
+      - { x: 60000,   y: 35000 }
+      - { x: 90000,   y: 34000 }
+      - { x: 120000,  y: 33000 }
+      - { x: 150000,  y: 32000 }
 
 # ============================================================
 # LANDMARKS
@@ -443,85 +443,85 @@ roads:
 landmarks:
 
   - name: Parliament
-    position: { x: 480, z: 620 }
-    height: 40
+    position: { x: 48000, y: 62000 }
+    height: 4000
     district: Westminster
     model_prompt: "Gothic revival parliament building, Elizabeth Tower (Big Ben) clock tower, Portland stone, Thames-facing, game asset"
     gameplay: "Visible from Westminster Bridge. The building where the Civility Index law was written. Passing it at RED triggers extra CCTV."
 
   - name: Downing Street Gate
-    position: { x: 500, z: 850 }
-    height: 4
+    position: { x: 50000, y: 85000 }
+    height: 400
     district: Westminster
     model_prompt: "Black iron security gate with police guard booth, Downing Street style, game asset"
     gameplay: "Restricted area. Entering adds +5 to meter instantly. Sir Keith Harmer is sometimes visible behind the gate."
 
   - name: The Shard
-    position: { x: 1500, z: 380 }
-    height: 100
+    position: { x: 150000, y: 38000 }
+    height: 10000
     district: South Bank
     model_prompt: "Glass pyramidal skyscraper, The Shard London style, very tall, game asset"
     gameplay: "Visible from everywhere south of the Thames. Orientation landmark. Merchant has offices here."
 
   - name: Tower Bridge
-    position: { x: 2100, z: 510 }
-    height: 30
+    position: { x: 210000, y: 51000 }
+    height: 3000
     district: border
     model_prompt: "Tower Bridge London, two gothic towers, suspension bridge, blue painted ironwork, game asset"
     gameplay: "Easternmost crossing. Less patrolled than Westminster Bridge. Escape route."
 
   - name: St Pauls Cathedral
-    position: { x: 1400, z: 1000 }
-    height: 50
+    position: { x: 140000, y: 100000 }
+    height: 5000
     district: The City
     model_prompt: "St Pauls Cathedral dome, baroque, Portland stone, large dome and columns, game asset"
     gameplay: "Centre of The City district. Network dead-drop location nearby."
 
   - name: London Eye
-    position: { x: 700, z: 450 }
-    height: 45
+    position: { x: 70000, y: 45000 }
+    height: 4500
     district: South Bank
     model_prompt: "Large observation wheel, London Eye style, white steel structure, game asset"
     gameplay: "South bank landmark. Visible from Westminster. Tourist area, lots of pedestrians, easy to blend into crowds at AMBER."
 
   - name: Buckingham Palace Gates
-    position: { x: 200, z: 900 }
-    height: 8
+    position: { x: 20000, y: 90000 }
+    height: 800
     district: Westminster
     model_prompt: "Ornate palace gates with gold tips, guard sentry boxes, wide ceremonial road, game asset"
     gameplay: "Old Guard adjacent. Prince Rupert's estate is behind these gates. Police never patrol inside."
 
   - name: Brutalist Tower (Elephant)
-    position: { x: 1000, z: 200 }
-    height: 45
+    position: { x: 100000, y: 20000 }
+    height: 4500
     district: Elephant and Castle
     model_prompt: "1960s brutalist council tower block, grey concrete, small windows, balconies with washing lines, council estate, game asset"
     gameplay: "Restorationist territory. Tommy Lemon's last known address (he's never there)."
 
   - name: Composter HQ
-    position: { x: 2000, z: 1200 }
-    height: 12
+    position: { x: 200000, y: 120000 }
+    height: 1200
     district: Shoreditch
     model_prompt: "Converted Victorian warehouse with modern glass extension on roof, 'Community Action Centre' sign, bicycle racks outside, game asset"
     gameplay: "Zane Polansky operates from here. Faded HypnoBoost poster in the window."
 
   - name: The Library
-    position: { x: 300, z: 800 }
-    height: 18
+    position: { x: 30000, y: 80000 }
+    height: 1800
     district: Westminster
     model_prompt: "Victorian public library, red brick with stone detailing, arched entrance, slightly neglected, game asset"
     gameplay: "MISSION 5 TARGET. The Network's pirate transmitter is in the basement. This is where the broadcast happens."
 
   - name: Power Depot
-    position: { x: 1500, z: 900 }
-    height: 8
+    position: { x: 150000, y: 90000 }
+    height: 800
     district: The City
     model_prompt: "Industrial utility building, concrete, heavy security door, electrical warning signs, surrounded by glass towers, game asset"
     gameplay: "MISSION 5 START. The power cell is inside. Restricted area. Meter ticks up just being near it."
 
   - name: Merchant Tower
-    position: { x: 2200, z: 200 }
-    height: 70
+    position: { x: 220000, y: 20000 }
+    height: 7000
     district: Canary Wharf
     model_prompt: "Luxury residential tower, glass and steel, penthouse visible at top, helipad, game asset"
     gameplay: "Zia Merchant's penthouse. Permanently GREEN Civility Index zone around it. Money buys compliance."
@@ -553,9 +553,9 @@ mission_5:
     - escape: any direction
       action: "Escape through Landanstan at BLACK level."
 
-  route_distance: ~1200m
+  route_distance: ~120000    # ~1200m in centimetres
   estimated_drive_time: 90 seconds at speed
-  cctv_corridor: "Westminster section has camera every 50m. Unavoidable."
+  cctv_corridor: "Westminster section has camera every 5000cm (50m). Unavoidable."
 
 # ============================================================
 # BUILDING FILL RULES
@@ -568,26 +568,26 @@ fill_rules:
   # 2. Use that district's building_style and height range
   # 3. Place buildings along road edges, facing the road
   # 4. Leave a pavement gap between road and building
-  # 5. Vary building width: 6-15m for terraces, 15-30m for offices, 20-40m for towers
+  # 5. Vary building width: 600-1500cm for terraces, 1500-3000cm for offices, 2000-4000cm for towers
   # 6. Vary height within district range (randomise)
-  # 7. Add box colliders slightly larger than visual mesh
+  # 7. Add Box Collision components slightly larger than visual mesh
   # 8. Every 3rd building: add CCTV camera on corner (more frequent in high-density CCTV districts)
-  # 9. Place parked cars along roads: one every 20-30m on minor roads, every 40-50m on major roads
-  # 10. Add lampposts every 25m on both sides of every road
+  # 9. Place parked cars along roads: one every 2000-3000cm on minor roads, every 4000-5000cm on major roads
+  # 10. Add lampposts every 2500cm on both sides of every road
 
   building_widths:
-    georgian_townhouse: { min: 6, max: 8, depth: 12 }
-    civic_institutional: { min: 20, max: 40, depth: 25 }
-    mixed_high_street: { min: 5, max: 10, depth: 10 }
-    victorian_commercial: { min: 8, max: 15, depth: 12 }
-    glass_tower: { min: 25, max: 40, depth: 25 }
-    warehouse_conversion: { min: 15, max: 30, depth: 20 }
-    new_build_residential: { min: 12, max: 20, depth: 15 }
-    mixed_cultural: { min: 20, max: 50, depth: 30 }
-    victorian_terrace: { min: 5, max: 7, depth: 10 }
-    brutalist_council: { min: 20, max: 40, depth: 15 }
-    warehouse_mixed: { min: 15, max: 25, depth: 20 }
-    corporate_tower: { min: 30, max: 45, depth: 30 }
+    georgian_townhouse: { min: 600, max: 800, depth: 1200 }
+    civic_institutional: { min: 2000, max: 4000, depth: 2500 }
+    mixed_high_street: { min: 500, max: 1000, depth: 1000 }
+    victorian_commercial: { min: 800, max: 1500, depth: 1200 }
+    glass_tower: { min: 2500, max: 4000, depth: 2500 }
+    warehouse_conversion: { min: 1500, max: 3000, depth: 2000 }
+    new_build_residential: { min: 1200, max: 2000, depth: 1500 }
+    mixed_cultural: { min: 2000, max: 5000, depth: 3000 }
+    victorian_terrace: { min: 500, max: 700, depth: 1000 }
+    brutalist_council: { min: 2000, max: 4000, depth: 1500 }
+    warehouse_mixed: { min: 1500, max: 2500, depth: 2000 }
+    corporate_tower: { min: 3000, max: 4500, depth: 3000 }
 
 # ============================================================
 # ATMOSPHERE
@@ -639,23 +639,23 @@ sounds:
 # GENERATION INSTRUCTIONS FOR CLAUDE CODE
 # ============================================================
 #
-# 1. Create a Unity editor script: LandanstanGenerator.cs
+# 1. Create a UE5 Editor Utility Blueprint or Python script: LandanstanGenerator
 # 2. Parse this file (treat as YAML)
-# 3. Create a flat terrain at the map dimensions
+# 3. Create a flat landscape at the map dimensions (240000 x 160000 Unreal units)
 # 4. Generate river mesh from spline points (blue-grey water material)
 # 5. Generate bridge meshes at specified positions
-# 6. For each road: create spline, extrude road mesh, add pavement meshes
+# 6. For each road: create spline, extrude road mesh (Spline Mesh Components), add pavement meshes
 # 7. For each block between roads:
 #    a. Determine district from block centre position
 #    b. Place buildings along road-facing edges per fill_rules
 #    c. Use placeholder boxes initially (correct size, district colour)
-#    d. Add box colliders
+#    d. Add Box Collision components
 #    e. Add CCTV cameras per district density
 #    f. Add parked cars and lampposts
 # 8. Place landmark prefabs at specified positions (placeholder cubes with labels)
-# 9. Set up URP post-processing volume per district
-# 10. Bake NavMesh on pavements for pedestrian pathfinding
-# 11. Output: one Unity scene, LandanstanCity.unity
+# 9. Set up Post Process Volumes per district with Lumen global illumination
+# 10. Build NavMesh on pavements for pedestrian pathfinding
+# 11. Output: one UE5 level, Landanstan_Main.umap
 #
 # Placeholder models get replaced later with:
 #   - City Builder: London prefabs for generic buildings
